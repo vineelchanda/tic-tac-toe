@@ -1,0 +1,20 @@
+MIGRATION NOTES (Realtime DB -> Firestore):
+
+CHANGES:
+- Path moved from /games/<id> (RTDB) to collection games/<id> doc.
+- Listener: onValue -> onSnapshot.
+- Atomic updates: runTransaction in Firestore instead of RTDB runTransaction (logic similar).
+- Presence: Firestore does not natively clear on disconnect; previous onDisconnect cleanup not available. Future approach: dual DB (Firestore for state, RTDB for presence) or periodic cleanup job.
+
+FOLLOW-UPS:
+- Implement presence tracking.
+- Strengthen rules to enforce correct moves server-side.
+- Optionally add subcollections for chat or history.
+
+BENEFITS:
+- Structured documents, powerful querying if extended.
+- Multi-document transactions available if future features need cross-game effects.
+
+RISKS:
+- Without strict rules or auth, malicious clients can mutate games.
+- Need cloud cleanup to prevent unbounded game document growth.

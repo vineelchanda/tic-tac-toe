@@ -1,0 +1,14 @@
+HARDENING SUGGESTIONS:
+1. Require authenticated users; store UID instead of random ephemeral IDs.
+2. Firestore rules:
+   - Allow join only if seat currently null.
+   - Allow move only if:
+       a) status == 'in_progress'
+       b) correct player's turn
+       c) board[index] == ''
+   - Validate win/draw transitions (can replicate winner logic partially in rules).
+3. Cloud Functions:
+   - Periodically mark stale games abandoned if lastMoveAt older than threshold.
+   - Archive completed games.
+4. Add rate limiting for resets; store reset counter + timestamp.
+5. Use Realtime Database (presence) or a heartbeat field for robust online status.
